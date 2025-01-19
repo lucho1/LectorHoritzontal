@@ -1,27 +1,29 @@
 import tkinter as tk
+import app_globals as app
 
 from text_viewer import TextViewer
-from file_readers import read_file, get_filename
+from file_readers import read_file
 
 
 
 def create_window(text: str, filename: str):
     root = tk.Tk()
-    app = TextViewer(root, text, filename)
+    app_viewer = TextViewer(root, text, filename)
     root.mainloop()
 
 
-
-# MAIN
+### MAIN
 if __name__ == "__main__":
-    print("\n\n\n")
-    print("==== LECTOR HORITZONTAL, per Lucho Suaya ====")
+    app.print_info("\n\n\n")
+    app.print_blue("==== LECTOR HORITZONTAL, per Lucho Suaya ====")
 
     #filepath = "D:/Repos/LectorHoritzontal/reader_test.epub"
     #filepath = "D:/Repos/LectorHoritzontal/reader_test.pdf"
     filepath = "D:/Repos/LectorHoritzontal/reader_test.docx"
+    if not app.file_exists(filepath):
+        app.print_error(f"No file found at: {filepath}")
+        exit(1)
 
     file: str = read_file(filepath)
-    name: str = get_filename(filepath)
+    name: str = app.get_filename(filepath)
     create_window(file, name)
-    

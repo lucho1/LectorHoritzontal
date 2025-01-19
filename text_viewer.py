@@ -1,5 +1,6 @@
 import os
 import json
+import app_globals as app
 import tkinter as tk
 
 from tkinter import filedialog, ttk, font
@@ -8,16 +9,7 @@ from file_readers import read_file
 
 
 
-# Default settings list, to change default settings just modify this
-DEFAULT_SETTINGS = {
-    'font': 'Calibri',
-    'font_size': 75,
-    'speed': 10,
-    'window_width': 800,
-    'window_height': 600,
-    'window_x': 50,
-    'window_y': 50
-}
+
 
 
 
@@ -225,12 +217,12 @@ class TextViewer:
 
     def reset_settings(self):
         # Use global DEFAULT_SETTINGS
-        self.font_var.set(DEFAULT_SETTINGS['font'])
-        self.size_var.set(str(DEFAULT_SETTINGS['font_size']))
-        self.speed_slider.set(DEFAULT_SETTINGS['speed'])
+        self.font_var.set(app.DEFAULT_SETTINGS['font'])
+        self.size_var.set(str(app.DEFAULT_SETTINGS['font_size']))
+        self.speed_slider.set(app.DEFAULT_SETTINGS['speed'])
         
         self.change_font(None)
-        self.update_scroll_speed(DEFAULT_SETTINGS['speed'])
+        self.update_scroll_speed(app.DEFAULT_SETTINGS['speed'])
 
     def on_window_configure(self, event):
         # Only save if it's a real window change (not during initialization)
@@ -243,7 +235,6 @@ class TextViewer:
     
 
     def save_settings(self):
-        print("Saving settings...")
         settings = {
             'font': self.font_var.get(),
             'font_size': int(self.size_var.get()),
@@ -256,14 +247,13 @@ class TextViewer:
         
         try:
             with open(self.settings_file, 'w') as f:
-                print("Successfully saved settings!")
                 json.dump(settings, f)
         except Exception as e:
             print(f"Couldn't save settings: {e}")
     
     def load_settings(self):
         print("Loading settings...")
-        settings = DEFAULT_SETTINGS.copy()
+        settings = app.DEFAULT_SETTINGS.copy()
         
         try:
             if os.path.exists(self.settings_file):
