@@ -1,6 +1,7 @@
 import os
 import ebooklib
 
+from typing import Callable
 from docx import Document
 from PyPDF2 import PdfReader
 from ebooklib import epub
@@ -8,114 +9,100 @@ from bs4 import BeautifulSoup
 
 
 
-# Private reader functions
-def _read_docx(filepath):
-    try:
-        # Create a Document object
-        doc = Document(filepath)
-        ret = ""
-        
-        # Iterate through paragraphs and print their text
-        for paragraph in doc.paragraphs:
-            if paragraph.text.strip():  # Only print non-empty paragraphs
-                ret += paragraph.text.strip().replace('\n', ' ') + " "
-        
-        if ret:
-            print("\n\nSuccessfully read text in file!")
-        else:
-            print("\n\nNo text found in file!")
-            ret = f"Error: No text found in file!"
-        
-        return ret
-                
-    except Exception as e:
-        print(f"\n\nError reading the file: {e}")
-        return f"Error reading the file: {e}"
-
-
-def _read_pdf(filepath):
-    try:
-        # Create a PDF reader object
-        reader = PdfReader(filepath)
-        ret = ""
-        
-        # Iterate through all pages and print text
-        for page_num in range(len(reader.pages)):
-            # Get the page object
-            page = reader.pages[page_num]
-            
-            # Extract text from page
-            text = page.extract_text()
-            if text.strip():
-                ret += text.strip().replace('\n', ' ') + " "
-                
-        if ret:
-            print("\n\nSuccessfully read text in file!")
-        else:
-            print("\n\nNo text found in file!")
-            ret = f"Error: No text found in file!"
-        
-        return ret
-                
-    except Exception as e:
-        print(f"\n\nError reading the file: {e}")
-        return f"Error reading the file: {e}"
-
-
-def _read_epub(filepath):
-    try:
-        # Create epub reader object
-        book = epub.read_epub(filepath)
-        ret = ""
-        
-        # Iterate through all the items
-        for item in book.get_items():
-            # If item is document content
-            if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                # Get the content
-                content = item.get_content()
-                
-                # Parse HTML content with BeautifulSoup
-                soup = BeautifulSoup(content, 'html.parser')
-                
-                # Get text content
-                text = soup.get_text()
-                
-                # Print cleaned text (if not empty)
-                if text.strip():
-                    ret += text.strip().replace('\n', ' ') + " "
-        
-        if ret:
-            print("\n\nSuccessfully read text in file!")
-        else:
-            print("\n\nNo text found in file!")
-            ret = f"Error: No text found in file!"
-        
-        return ret
-                
-    except Exception as e:
-        print(f"\n\nError reading the file: {e}")
-        return f"Error reading the file: {e}"
-
-
-
-# List of available readers according to file extension
-# To extend support, add extension and function name here, and create the function below)
-AVAILABLE_READERS = {
-        '.docx': _read_docx,
-        '.pdf': _read_pdf,
-        '.epub': _read_epub
+### Variable list of available readers according to file extension
+### To extend support, add extension and function name here, and create the function below
+AVAILABLE_READERS: dict[str, Callable[[str], str]] = {
+    '.docx': '_read_docx',
+    '.pdf': '_read_pdf',
+    '.epub': '_read_epub'
 }
 
-# Main public function to use in this script
-def read_file(filepath):
+
+
+### Main public functions to use in this script
+def get_filename(filepath: str) -> str:
+    if os.path.exists(filepath):
+        return os.path.basename(filepath)
+    else:
+        return _print_and_return_str(f"No document file found at: {filepath}")
+
+def read_file(filepath: str) -> str:
+    if not os.path.exists(filepath):
+        return _print_and_return_str(f"No document file found at: {filepath}")
+
     # Get file extension and convert to lowercase
+    print("Reading Document: " + filepath)
     _, extension = os.path.splitext(filepath)
     extension = extension.lower()
 
-    if extension in AVAILABLE_READERS:
-        print(f"\nReading '{extension}' file: {filepath}")
-        return AVAILABLE_READERS[extension](filepath)
-    else:
-        print(f"\nUnsupported file type: '{extension}'")
-        return f"Error: Unsupported file type '{extension}'"
+    # Check if we can read it
+    if extension not in AVAILABLE_READERS:
+        return _print_and_return_str(f"\nError: Unsupported file type '{extension}'")
+    
+    # Try reading it
+    file_text_content: str = ""
+    try:
+        reader_function: Callable[[str], str] = globals()[AVAILABLE_READERS[extension]]
+        file_text_content: str = reader_function(filepath)
+    except Exception as e:
+        return _print_and_return_str(f"\n\nError reading file: {e}")
+
+    # Check if it's not empty
+    if file_text_content == "":
+        return _print_and_return_str(f"\n\nNo text found in file!")
+
+    print("\n\nSuccessfully read text in file!")
+    print(f"\nDisplaying text from '{extension}' file at: {filepath}")
+    return file_text_content
+
+
+
+### Private Helper functions
+def _print_and_return_str(error: str) -> str:
+    print(error)
+    return error
+
+def _inline_text(text: str) -> str:
+    if text.strip():
+        return text.strip().replace('\n', ' ') + " "
+    return ""
+
+
+
+### Private Reader functions
+def _read_docx(filepath: str) -> str:
+    doc = Document(filepath)
+    ret: str = ""
+    
+    # Iterate paragraphs in doc and append their text
+    for paragraph in doc.paragraphs:
+        ret += _inline_text(paragraph.text)
+        
+    return ret
+
+def _read_pdf(filepath: str) -> str:
+    doc = PdfReader(filepath)
+    ret: str = ""
+        
+    # Iterate pages in the doc, get their object and extract & append text
+    for page_num in range(len(doc.pages)):
+        page = doc.pages[page_num]
+        ret += _inline_text(page.extract_text())
+        
+    return ret
+
+def _read_epub(filepath: str) -> str:
+    doc = epub.read_epub(filepath)
+    ret: str = ""
+        
+    # Iterate all the doc items
+    for item in doc.get_items():
+        # If item is not document, skip it
+        if item.get_type() != ebooklib.ITEM_DOCUMENT:
+            continue
+        
+        # Parse item content with BeautifulSoup (HTML parser) and append its text
+        soup = BeautifulSoup(item.get_content(), 'html.parser')
+        ret += _inline_text(soup.get_text())
+        
+    return ret

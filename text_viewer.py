@@ -3,6 +3,7 @@ import json
 import tkinter as tk
 
 from tkinter import filedialog, ttk, font
+from file_readers import read_file
 
 
 
@@ -21,7 +22,7 @@ DEFAULT_SETTINGS = {
 
 
 class TextViewer:
-    def __init__(self, root, text, filename):
+    def __init__(self, root, text: str, filename: str):
         # Get the directory where the script is located
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
 

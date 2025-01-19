@@ -1,12 +1,11 @@
-import os
 import tkinter as tk
 
 from text_viewer import TextViewer
-from file_readers import read_file
+from file_readers import read_file, get_filename
 
 
 
-def create_window(text, filename):
+def create_window(text: str, filename: str):
     root = tk.Tk()
     app = TextViewer(root, text, filename)
     root.mainloop()
@@ -22,10 +21,7 @@ if __name__ == "__main__":
     #filepath = "D:/Repos/LectorHoritzontal/reader_test.pdf"
     filepath = "D:/Repos/LectorHoritzontal/reader_test.docx"
 
-    if os.path.exists(filepath):
-        print("Reading Document: " + filepath)
-        file = read_file(filepath)
-        create_window(file, os.path.basename(filepath))
-    else:
-        print(f"No document file found at: {filepath}")
+    file: str = read_file(filepath)
+    name: str = get_filename(filepath)
+    create_window(file, name)
     
