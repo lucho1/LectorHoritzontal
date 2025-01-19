@@ -6,21 +6,21 @@ echo Checking Python installation...
 :: Check if Python is installed
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo Python is not installed. Installing...
+    echo Python not installed. Installing...
     
     :: Create temp directory
     mkdir temp 2>nul
     
-    :: Download Python
+    :: Download Python 3.11.8
     set PYTHON_VERSION=3.11.8
-    set PYTHON_MSI=python-%PYTHON_VERSION%-amd64.exe
-    powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.python.org/ftp/python/%PYTHON_VERSION%/%PYTHON_MSI%', 'temp\%PYTHON_MSI%')"
+    set PYTHON_INSTALLER=python-%PYTHON_VERSION%-amd64.exe
+    powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.python.org/ftp/python/%PYTHON_VERSION%/%PYTHON_INSTALLER%', 'temp\%PYTHON_INSTALLER%')"
     
     :: Install Python
     echo Installing Python %PYTHON_VERSION%...
-    temp\%PYTHON_MSI% /quiet InstallAllUsers=1 PrependPath=1 Include_pip=1 Include_tcltk=1
+    temp\%PYTHON_INSTALLER% /quiet InstallAllUsers=1 PrependPath=1 Include_pip=1 Include_tcltk=1
     
-    :: Clean up
+    :: Delete temp directory
     rmdir /s /q temp
     
     echo Python installation completed!
@@ -32,7 +32,7 @@ echo Checking required Python packages...
 :: List of required packages
 set PACKAGES=ebooklib python-docx PyPDF2 beautifulsoup4
 
-:: Check and install each package
+:: Check and install each package if not installed
 for %%p in (%PACKAGES%) do (
     python -c "import %%p" 2>nul
     if errorlevel 1 (
@@ -48,6 +48,7 @@ for %%p in (%PACKAGES%) do (
     )
 )
 
+:: Check PyInstaller (required to create the .exe file)
 echo.
 echo Checking PyInstaller...
 python -c "import PyInstaller" 2>nul
@@ -56,6 +57,7 @@ if errorlevel 1 (
     python -m pip install pyinstaller
     if errorlevel 1 (
         echo Failed to install PyInstaller
+        echo You can still use the program using "Lector Horitzontal.bat"
         pause
         exit /b 1
     )
@@ -68,13 +70,13 @@ pyinstaller --onefile --noconsole --name "Lector Horitzontal" reader.py
 :: Move the executable to the current directory
 move "dist\Lector Horitzontal.exe" .
 
-:: Clean up PyInstaller files
+:: Delete up PyInstaller files
 rmdir /s /q build
 rmdir /s /q dist
 del "Lector Horitzontal.spec"
 
 
 echo.
-echo All requirements satisfied!
+echo Everything setup!
 echo You can now run "Lector Horitzontal.exe"
 pause
