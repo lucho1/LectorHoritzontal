@@ -48,6 +48,14 @@ for %%p in (%PACKAGES%) do (
     )
 )
 
+:: Check also tkinter, just in case...
+echo Checking tkinter installation...
+python -c "import tkinter" 2>nul
+if errorlevel 1 (
+    echo Warning: tkinter not installed properly, installing...
+    python -m pip install tk
+)
+
 :: Check PyInstaller (required to create the .exe file)
 echo.
 echo Checking PyInstaller...
