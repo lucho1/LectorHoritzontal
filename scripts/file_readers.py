@@ -23,7 +23,7 @@ AVAILABLE_READERS: dict[str, Callable[[str], str]] = {
 def read_file(filepath: str) -> str:
     # Get file extension and convert to lowercase
     app.print_info("Reading Document: " + filepath)
-    extension = app.get_extension(filepath)
+    extension: str = app.get_extension(filepath)
 
     # Check if we can read it
     if extension not in AVAILABLE_READERS:
