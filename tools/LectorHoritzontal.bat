@@ -1,8 +1,7 @@
 @echo off
 
-if exist python reader.py (
-    python main.py
-) else (
+python ../scripts/main.py
+if errorlevel 1 (
     echo Couldn't run Lector Horitzontal! D:
 )
 
