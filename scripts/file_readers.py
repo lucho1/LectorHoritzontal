@@ -1,7 +1,6 @@
 import app_globals as app
 import ebooklib
 
-from typing import Callable
 from docx import Document
 from PyPDF2 import PdfReader
 from ebooklib import epub
@@ -22,7 +21,7 @@ def read_file(filepath: str) -> str:
     # Try reading it
     file_text_content: str = ""
     try:
-        reader_function: Callable[[str], str] = globals()[AVAILABLE_READERS[extension]]
+        reader_function = globals()[app.AVAILABLE_READERS[extension]]
         file_text_content: str = reader_function(filepath)
     except Exception as e:
         return app.print_and_return_error(f"Couldn't read file: {e}")
