@@ -11,6 +11,12 @@ YELLOW = '\033[93m'
 BLUE = '\033[94m'
 DEFAULT = '\033[0m' # white
 
+# Filepath to root directory
+ROOT_DIR = os.path.dirname((os.path.abspath(__file__)))
+
+# Filepath to settings file
+SETTINGS_FILEPATH = os.path.join(ROOT_DIR, "data\\settings\\settings.json")
+
 # Default settings list, to change default settings just modify this
 # Note settings are saved & loaded so will prioritize saved settings
 DEFAULT_SETTINGS = {

@@ -15,12 +15,6 @@ from file_readers import read_file
 
 class TextViewer:
     def __init__(self, root, text: str, filename: str):
-        # Get the directory where the script is located
-        self.script_dir = os.path.dirname(os.path.abspath(__file__))
-
-        # Create settings file path in the same directory
-        self.settings_file = os.path.join(self.script_dir, "reader_settings.json")
-
         # Load settings before creating UI elements
         self.load_settings()
 
@@ -246,7 +240,7 @@ class TextViewer:
         }
         
         try:
-            with open(self.settings_file, 'w') as f:
+            with open(app.SETTINGS_FILEPATH, 'w') as f:
                 json.dump(settings, f)
         except Exception as e:
             print(f"Couldn't save settings: {e}")
@@ -256,13 +250,13 @@ class TextViewer:
         settings = app.DEFAULT_SETTINGS.copy()
         
         try:
-            if os.path.exists(self.settings_file):
-                print(f"Settings loaded from: {self.settings_file}")
-                with open(self.settings_file, 'r') as f:
+            if os.path.exists(app.SETTINGS_FILEPATH):
+                print(f"Settings loaded from: {app.SETTINGS_FILEPATH}")
+                with open(app.SETTINGS_FILEPATH, 'r') as f:
                     loaded_settings = json.load(f)
                     settings.update(loaded_settings)
             else:
-                print(f"No settings file found at: {self.settings_file}")
+                print(f"No settings file found at: {app.SETTINGS_FILEPATH}")
                 print("Using default settings")
         except Exception as e:
             print(f"Couldn't load settings: {e}")
