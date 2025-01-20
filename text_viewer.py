@@ -240,6 +240,7 @@ class TextViewer:
         }
         
         try:
+            os.makedirs(os.path.dirname(app.SETTINGS_FILEPATH), exist_ok=True)
             with open(app.SETTINGS_FILEPATH, 'w') as f:
                 json.dump(settings, f)
         except Exception as e:
