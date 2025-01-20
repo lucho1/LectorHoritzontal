@@ -40,9 +40,9 @@ DEFAULT_SETTINGS: dict[str, Union[str, int]] = {
 # Current settings list
 CURRENT_SETTINGS: dict[str, Union[str, int]] = DEFAULT_SETTINGS.copy()
 
-# Available readers according to file extension and the function used to read them (located in file_readers.py)
+# Supported readers according to file extension and the function used to read them (located in file_readers.py)
 # To extend support, add extension and function name here, and create the function in file_readers.py
-AVAILABLE_READERS: dict[str, Callable[[str], str]] = {
+SUPPORTED_READERS: dict[str, Callable[[str], str]] = {
     '.docx': '_read_docx',
     '.pdf': '_read_pdf',
     '.epub': '_read_epub'
@@ -109,7 +109,7 @@ def open_file_dialog() -> str:
    file_types = [('', '')]
    all_extensions: str = ""
 
-   for extension in AVAILABLE_READERS.keys():
+   for extension in SUPPORTED_READERS.keys():
       formatted_extension: str = '*' + extension
 
       all_extensions += formatted_extension + ';'

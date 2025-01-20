@@ -15,13 +15,13 @@ def read_file(filepath: str) -> str:
     extension: str = app.get_extension(filepath)
 
     # Check if we can read it
-    if extension not in app.AVAILABLE_READERS:
+    if extension not in app.SUPPORTED_READERS:
         return app.print_and_return_error(f"Unsupported file type '{extension}'")
     
     # Try reading it
     file_text_content: str = ""
     try:
-        reader_function = globals()[app.AVAILABLE_READERS[extension]]
+        reader_function = globals()[app.SUPPORTED_READERS[extension]]
         file_text_content: str = reader_function(filepath)
     except Exception as e:
         return app.print_and_return_error(f"Couldn't read file: {e}")
