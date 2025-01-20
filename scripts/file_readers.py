@@ -9,16 +9,6 @@ from bs4 import BeautifulSoup
 
 
 
-### Variable list of available readers according to file extension
-### To extend support, add extension and function name here, and create the function below
-AVAILABLE_READERS: dict[str, Callable[[str], str]] = {
-    '.docx': '_read_docx',
-    '.pdf': '_read_pdf',
-    '.epub': '_read_epub'
-}
-
-
-
 ### Main public function to use in this script
 def read_file(filepath: str) -> str:
     # Get file extension and convert to lowercase
@@ -26,7 +16,7 @@ def read_file(filepath: str) -> str:
     extension: str = app.get_extension(filepath)
 
     # Check if we can read it
-    if extension not in AVAILABLE_READERS:
+    if extension not in app.AVAILABLE_READERS:
         return app.print_and_return_error(f"Unsupported file type '{extension}'")
     
     # Try reading it

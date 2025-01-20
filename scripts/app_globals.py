@@ -33,6 +33,14 @@ DEFAULT_SETTINGS: dict[str, Union[str, int]] = {
     'window_y': 50
 }
 
+# Available readers according to file extension and the function used to read them (located in file_readers.py)
+# To extend support, add extension and function name here, and create the function in file_readers.py
+AVAILABLE_READERS: dict[str, Callable[[str], str]] = {
+    '.docx': '_read_docx',
+    '.pdf': '_read_pdf',
+    '.epub': '_read_epub'
+}
+
 
 
 ### Console print functions
