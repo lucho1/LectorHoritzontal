@@ -1,4 +1,7 @@
 __pycache__
+data/test
+*reader_test
+
 
 *.exe
 *.json
