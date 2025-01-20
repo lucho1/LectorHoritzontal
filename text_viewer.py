@@ -22,9 +22,9 @@ class TextViewer:
         self.root = root
         self.root.title(f"Lector Horitzontal - {filename}")
         self.root.configure(bg='#E0E0E0')
-        self.root.geometry("800x600")
+        self.root.minsize(930, 600)
+        self.root.geometry("930x600")
         self.root.geometry(f"{self.window_width}x{self.window_height}+{self.window_x}+{self.window_y}")
-        self.root.minsize(500, 300)
         
         self.fonts = sorted(list(font.families()))
         self.sizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 48, 72, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 175, 200, 225, 250, 275, 300, 350, 400, 450, 500]
