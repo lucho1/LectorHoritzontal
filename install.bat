@@ -73,7 +73,7 @@ if errorlevel 1 (
 
 echo.
 echo Creating executable...
-pyinstaller --onefile --noconsole --name "Lector Horitzontal" main.py
+pyinstaller --onefile --noconsole --name "Lector Horitzontal" scripts/main.py
 
 :: Move the executable to the current directory
 move "dist\Lector Horitzontal.exe" .

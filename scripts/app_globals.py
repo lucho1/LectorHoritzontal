@@ -12,10 +12,13 @@ BLUE = '\033[94m'
 DEFAULT = '\033[0m' # white
 
 # Filepath to root directory
-ROOT_DIR = os.path.dirname((os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
 
 # Filepath to settings file
 SETTINGS_FILEPATH = os.path.join(ROOT_DIR, "data\\settings\\settings.json")
+
+# Filepath to test files
+TEST_DATA_FILEPATH = os.path.join(ROOT_DIR, "data\\test\\")
 
 # Default settings list, to change default settings just modify this
 # Note settings are saved & loaded so will prioritize saved settings
@@ -74,3 +77,9 @@ def get_filename(filepath: str) -> str:
 def get_extension(filepath: str) -> str:
    _, extension = os.path.splitext(filepath)
    return extension.lower()
+
+def get_abs_filepath(relative_filepath: str) -> str:
+   return os.path.join(ROOT_DIR, relative_filepath)
+
+def get_test_file(test_file_name: str) -> str:
+   return os.path.join(TEST_DATA_FILEPATH, test_file_name)
