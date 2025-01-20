@@ -17,9 +17,9 @@ if __name__ == "__main__":
     app.print_info("\n\n\n")
     app.print_blue("==== LECTOR HORITZONTAL, per Lucho Suaya ====")
 
-    #filepath = "D:/Repos/LectorHoritzontal/reader_test.epub"
-    #filepath = "D:/Repos/LectorHoritzontal/reader_test.pdf"
-    filepath = "D:/Repos/LectorHoritzontal/reader_test.docx"
+    #filepath = "D:/Repos/LectorHoritzontal/data/test/reader_test.epub"
+    #filepath = "D:/Repos/LectorHoritzontal/data/test/reader_test.pdf"
+    filepath = "D:/Repos/LectorHoritzontal/data/test/reader_test.docx"
     if not app.file_exists(filepath):
         app.print_error(f"No file found at: {filepath}")
         exit(1)
