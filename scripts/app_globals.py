@@ -1,5 +1,9 @@
 import os
+
 from typing import Union
+from typing import Callable
+from tkinter import filedialog
+
 os.system('color')
 
 
@@ -95,3 +99,21 @@ def get_test_file(test_file_name: str) -> str:
 
 def ensure_file_exists(filepath: str) -> str:
    return os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+
+def open_file_dialog() -> str:
+   # Get supported file types
+   file_types = [('', '')]
+   all_extensions: str = ""
+
+   for extension in AVAILABLE_READERS.keys():
+      formatted_extension: str = '*' + extension
+
+      all_extensions += formatted_extension + ';'
+      file_types.append((extension.upper() + ' files', formatted_extension))
+   
+   file_types[0] = ('All supported files', all_extensions)
+   
+   # Open filedialog
+   filepath: str = filedialog.askopenfilename(title='Select a file to read', filetypes=file_types)
+   return filepath
