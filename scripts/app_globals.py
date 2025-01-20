@@ -84,3 +84,6 @@ def get_abs_filepath(relative_filepath: str) -> str:
 
 def get_test_file(test_file_name: str) -> str:
    return os.path.join(TEST_DATA_FILEPATH, test_file_name)
+
+def ensure_file_exists(filepath: str) -> str:
+   return os.makedirs(os.path.dirname(filepath), exist_ok=True)
