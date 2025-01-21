@@ -31,10 +31,10 @@ DEFAULT_SETTINGS: dict[str, Union[str, int]] = {
     'font': 'Calibri',
     'font_size': 75,
     'speed': 10,
-    'window_width': 800,
-    'window_height': 600,
-    'window_x': 50,
-    'window_y': 50
+    'win_w': 800,
+    'win_h': 600,
+    'win_x': 50,
+    'win_y': 50
 }
 
 # Current settings list
