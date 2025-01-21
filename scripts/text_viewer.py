@@ -97,8 +97,7 @@ class TextViewer:
         self.scrollbar = ui.create_scrollbar(self.frame, 'horizontal', tk.X)
 
         # Text widget
-        text_values = (app.CURRENT_SETTINGS['font'], app.CURRENT_SETTINGS['font_size'])
-        self.text_area = ui.create_textarea(self.frame, 1, 1000, text_values, self.scrollbar.set)
+        self.text_area = ui.create_textarea(self.frame, 1, 1000, self.scrollbar.set)
         self.scrollbar.config(command=self.text_area.xview)
 
         # Insert text and disable editing

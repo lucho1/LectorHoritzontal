@@ -40,8 +40,8 @@ def create_label(parent: tk.Widget, text: str, padx = 5, side = tk.LEFT, **kwarg
     return label
 
 
-def create_textarea(parent: tk.Widget, height: int, width: int, font, xscroll_callback) -> tk.Text:
-    text_area = tk.Text(parent, wrap='none', height=height, width=width, bg='#E0E0E0', fg='black', font=font, xscrollcommand=xscroll_callback)
+def create_textarea(parent: tk.Widget, height: int, width: int, xscroll_callback) -> tk.Text:
+    text_area = tk.Text(parent, wrap='none', height=height, width=width, bg='#E0E0E0', fg='black', xscrollcommand=xscroll_callback)
     text_area.pack(expand=True, fill='x')
     return text_area
 
