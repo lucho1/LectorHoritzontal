@@ -1,11 +1,9 @@
-import os
-import json
 import serialization
 import app_globals as app
 import ui_globals as ui
 import tkinter as tk
 
-from tkinter import ttk, font
+from tkinter import font
 from file_readers import read_file
 
 
