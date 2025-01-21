@@ -19,7 +19,9 @@ if __name__ == "__main__":
 
     #filepath = app.get_test_file("reader_test.pdf")
     #filepath = app.get_test_file("reader_test.epub")
-    app.print_info("Settings file: " + app.ROOT_DIR)
+    app.print_info("Root Dir: " + app.ROOT_DIR)
+    app.print_info("Settings file: " + app.SETTINGS_FILEPATH)
+    app.print_info("Test data folder: " + app.TEST_DATA_FILEPATH)
 
     
     filepath = app.get_test_file("reader_test.docx")
