@@ -40,13 +40,9 @@ class TextViewer:
     
 
     def _create_frames(self):
-        # Top frame to hold other frames
+        # Top frame to hold other frames, Left frame for controls, Center frame for buttons
         top_frame = ui.create_frame(self.window.get_root(), fill=tk.X, padx=5, pady=5)
-
-        # Left frame for controls (inside top frame)
         self.left_frame = ui.create_frame(top_frame, side=tk.LEFT)
-
-        # Center frame for buttons (inside top frame)
         self.center_frame = ui.create_frame(top_frame, expand=True)
 
         # Frame to hold the text
