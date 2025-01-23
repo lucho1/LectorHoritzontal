@@ -1,8 +1,7 @@
 import os
 
-from typing import Union
-from typing import Callable
-from tkinter import filedialog
+from typing import Union, Callable
+from tkinter import filedialog, font
 
 os.system('color')
 
@@ -48,6 +47,10 @@ SUPPORTED_READERS: dict[str, Callable[[str], str]] = {
     '.epub': '_read_epub'
 }
 
+# Fonts settings
+FONTS: list = {}
+FONT_SIZES: list = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 48, 72, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 175, 200, 225, 250, 275, 300, 350, 400, 450, 500]
+
 
 
 ### Console print functions
@@ -69,6 +72,10 @@ def print_info(message: str):
 
 
 ### Helper functions
+def load_fonts():
+   global FONTS
+   FONTS = sorted(list(font.families()))
+
 def print_and_return_error(error_msg: str) -> str:
     print_error(error_msg)
     return error_msg

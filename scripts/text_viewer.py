@@ -3,7 +3,6 @@ import app_globals as app
 import ui_globals as ui
 import tkinter as tk
 
-from tkinter import font
 from file_readers import read_file
 from window import Window
 
@@ -20,9 +19,7 @@ class TextViewer:
         # Store text for font changes
         self.text = text
         
-        # Set text and scrolling variables
-        self.fonts = sorted(list(font.families()))
-        self.sizes = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 48, 72, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 175, 200, 225, 250, 275, 300, 350, 400, 450, 500]
+        # Set is scrolling
         self.is_scrolling = False
 
         # Set UI and key bindings
@@ -63,11 +60,11 @@ class TextViewer:
     def _create_font_controls(self):
         # Font dropdown
         self.font_var = ui.create_dropdown(
-            self.top_frame, self.fonts, self.current_font, 35, self.change_font, (0, 10))
+            self.top_frame, app.FONTS, self.current_font, 35, self.change_font, (0, 10))
         
         # Size dropdown
         self.size_var = ui.create_dropdown(
-            self.top_frame, self.sizes, str(self.font_size), 10, self.change_font)
+            self.top_frame, app.FONT_SIZES, str(self.font_size), 10, self.change_font)
     
 
     def _create_speed_controls(self):
