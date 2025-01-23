@@ -8,12 +8,6 @@ from window import Window
 
 
 
-def create_window(text: str, filename: str):
-    root = tk.Tk()
-    app_viewer = TextViewer(root, text, filename)
-    root.mainloop()
-
-
 ### MAIN
 if __name__ == "__main__":
     app.print_info("\n\n\n")
