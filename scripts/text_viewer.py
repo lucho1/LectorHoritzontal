@@ -40,42 +40,38 @@ class TextViewer:
     
 
     def _create_frames(self):
-        # Top frame for dropdowns and button
-        self.top_frame = tk.Frame(self.window.get_root(), bg='#E0E0E0')
-        self.top_frame.pack(fill=tk.X, padx=5, pady=5)
+        # Top frame to hold other frames
+        top_frame = ui.create_frame(self.window.get_root(), fill=tk.X, padx=5, pady=5)
 
-        # Left frame for (inside top frame)
-        self.left_frame = tk.Frame(self.top_frame, bg='#E0E0E0')
-        self.left_frame.pack(side=tk.LEFT)
+        # Left frame for controls (inside top frame)
+        self.left_frame = ui.create_frame(top_frame, side=tk.LEFT)
 
-        # Center frame (inside top frame)
-        self.center_frame = tk.Frame(self.top_frame, bg='#E0E0E0')
-        self.center_frame.pack(expand=True)
+        # Center frame for buttons (inside top frame)
+        self.center_frame = ui.create_frame(top_frame, expand=True)
 
         # Frame to hold the text
-        self.frame = tk.Frame(self.window.get_root(), bg='#E0E0E0')
-        self.frame.pack(expand=True, fill='both')
+        self.frame = ui.create_frame(self.window.get_root(), fill='both', expand=True)
     
     
     def _create_font_controls(self):
         # Font dropdown
         self.font_var = ui.create_dropdown(
-            self.left_frame, app.FONTS, self.current_font, 30, self.change_font, (5, 5))
+            self.left_frame, app.FONTS, self.current_font, self.change_font, padx=(5, 5), width=30)
         
         # Size dropdown
         self.size_var = ui.create_dropdown(
-            self.left_frame, app.FONT_SIZES, str(self.font_size), 10, self.change_font, (0, 5))
+            self.left_frame, app.FONT_SIZES, str(self.font_size), self.change_font, padx=(0, 5))
     
 
     def _create_speed_controls(self):
         # Speed slider
-        ui.create_label(self.left_frame, "Velocitat: ", (10, 2))
+        ui.create_label(self.left_frame, "Velocitat: ", padx=(10, 2))
         self.speed_slider = ui.create_slider(self.left_frame, 1, 50, self.scroll_amount, self.update_scroll_speed)
         self.scroll_label = ui.create_label(self.left_frame, str(self.scroll_amount)+"%")
     
     def _create_action_buttons(self):
         # Reset button
-        ui.create_button(self.left_frame, "Reinicia Valors", self.reset_settings, False, (10, 0))
+        ui.create_button(self.left_frame, "Reinicia Valors", self.reset_settings, takefocus=False, padx=(10, 0))
 
         # Open file button
         ui.create_button(self.center_frame, "Obrir Arxiu", self.open_new_document)
@@ -91,10 +87,10 @@ class TextViewer:
 
     def _create_text_area(self):
         # Horizontal scrollbar
-        scrollbar = ui.create_scrollbar(self.frame, 'horizontal', tk.X)
+        scrollbar = ui.create_scrollbar(self.frame, 'horizontal', fill=tk.X)
 
         # Text widget
-        self.text_area = ui.create_textarea(self.frame, 1, 1000, scrollbar.set)
+        self.text_area = ui.create_textarea(self.frame, scrollbar.set, height=1, width=1000)
         scrollbar.config(command=self.text_area.xview)
 
         # Insert text and disable editing
