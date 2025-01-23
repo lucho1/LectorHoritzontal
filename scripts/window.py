@@ -20,7 +20,7 @@ class Window:
         # Bind window events
         self.root.bind('<Configure>', self._on_window_configure)
     
-    
+
     def update_title(self, new_title: str):
         self.root.title(new_title)
     
@@ -52,4 +52,4 @@ class Window:
         self.x = serialization.get_setting('win_x')
         self.y = serialization.get_setting('win_y')
 
-        print("Window settings:", f"Size: {self.width}x{self.height}", f"Position: ({self.x},{self.y})")
+        print("Window settings:", f"Size({self.width}x{self.height})", f"Position({self.x},{self.y})")

@@ -162,7 +162,7 @@ class TextViewer:
     def scroll_text(self, event, scroll_right):
         current_pos = float(self.text_area.xview()[0])
         speed = self.scroll_amount if scroll_right else -self.scroll_amount
-        new_pos = min(1.0, current_pos + speed)  # Ensure we don't scroll past the end
+        new_pos = min(1.0, current_pos + speed)
         self.text_area.xview_moveto(new_pos)
         return "break"
     
@@ -197,7 +197,7 @@ class TextViewer:
         print("TextViewer loaded settings: [",
               f"Font: {self.current_font} |",
               f"Font Size: {self.font_size} |",
-              f"Speed: {self.scroll_amount} |")
+              f"Speed: {self.scroll_amount} ]")
     
 
     def open_new_document(self):
