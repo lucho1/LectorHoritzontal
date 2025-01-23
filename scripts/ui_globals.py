@@ -15,14 +15,14 @@ def bind_button_events(button: ttk.Button, pressed_callback = None, release_call
 
 
 def create_dropdown(parent: tk.Widget, values: list, initial_value: str, width: int, callback = None, padx = 5, side = tk.LEFT) -> tuple[ttk.Combobox, tk.StringVar]:
-    textvar = tk.StringVar(value=initial_value)
-    dropdown = ttk.Combobox(parent, textvariable=textvar, values=values, state='readonly', width=width)
+    dropdown_var = tk.StringVar(value=initial_value)
+    dropdown = ttk.Combobox(parent, textvariable=dropdown_var, values=values, state='readonly', width=width)
     dropdown.pack(side=side, padx=padx)
 
     if callback:
         dropdown.bind('<<ComboboxSelected>>', callback)
     
-    return dropdown, textvar
+    return dropdown_var
 
 
 def create_slider(parent: tk.Widget, from_: float, to: float, initial_value: float, callback = None, length = 100, side = tk.LEFT) -> ttk.Scale:

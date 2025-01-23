@@ -62,11 +62,11 @@ class TextViewer:
     
     def _create_font_controls(self):
         # Font dropdown
-        self.font_dropdown, self.font_var = ui.create_dropdown(
+        self.font_var = ui.create_dropdown(
             self.top_frame, self.fonts, self.current_font, 35, self.change_font, (0, 10))
         
         # Size dropdown
-        self.size_dropdown, self.size_var = ui.create_dropdown(
+        self.size_var = ui.create_dropdown(
             self.top_frame, self.sizes, str(self.font_size), 10, self.change_font)
     
 
