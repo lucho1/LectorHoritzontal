@@ -10,8 +10,9 @@ from window import Window
 
 class TextViewer:
     def __init__(self, root, text: str, filename: str):
-        # Initialize window manager
+        # Initialize window manager and fonts
         self.window = Window(root, f"Lector Horitzontal - {filename}")
+        app.load_fonts()
 
         # Load settings before creating UI elements
         self.load_settings()
@@ -75,27 +76,27 @@ class TextViewer:
     
     def _create_action_buttons(self):
         # Reset button
-        self.reset_button = ui.create_button(self.left_frame, "Reinicia Valors", self.reset_settings, False, (10, 0))
+        ui.create_button(self.left_frame, "Reinicia Valors", self.reset_settings, False, (10, 0))
 
         # Open file button
-        self.open_button = ui.create_button(self.center_frame, "Obrir Arxiu", self.open_new_document)
+        ui.create_button(self.center_frame, "Obrir Arxiu", self.open_new_document)
 
         # Scroll buttons
-        self.scroll_left_button = ui.create_button(self.center_frame, "← Mou")
-        self.scroll_right_button = ui.create_button(self.center_frame, "Mou →")
+        scroll_left_button = ui.create_button(self.center_frame, "← Mou")
+        scroll_right_button = ui.create_button(self.center_frame, "Mou →")
 
         # Bind scroll buttons' press & release events
-        ui.bind_button_events(self.scroll_left_button, lambda e: self.start_scrolling(e, False), self.stop_scrolling)
-        ui.bind_button_events(self.scroll_right_button, lambda e: self.start_scrolling(e, True), self.stop_scrolling)
+        ui.bind_button_events(scroll_left_button, lambda e: self.start_scrolling(e, False), self.stop_scrolling)
+        ui.bind_button_events(scroll_right_button, lambda e: self.start_scrolling(e, True), self.stop_scrolling)
     
 
     def _create_text_area(self):
         # Horizontal scrollbar
-        self.scrollbar = ui.create_scrollbar(self.frame, 'horizontal', tk.X)
+        scrollbar = ui.create_scrollbar(self.frame, 'horizontal', tk.X)
 
         # Text widget
-        self.text_area = ui.create_textarea(self.frame, 1, 1000, self.scrollbar.set)
-        self.scrollbar.config(command=self.text_area.xview)
+        self.text_area = ui.create_textarea(self.frame, 1, 1000, scrollbar.set)
+        scrollbar.config(command=self.text_area.xview)
 
         # Insert text and disable editing
         self.text_area.insert(tk.END, self.text)
