@@ -10,12 +10,14 @@ from window import Window
 
 class TextViewer:
     def __init__(self, root, text: str, filename: str):
-        # Initialize window manager and fonts
-        self.window = Window(root, f"Lector Horitzontal - {filename}")
+        # Initialize fonts
         app.load_fonts()
 
         # Load settings before creating UI elements
         self.load_settings()
+
+        # Initialize Window
+        self.window = Window(root, f"Lector Horitzontal - {filename}")
 
         # Store text for font changes
         self.text = text
