@@ -9,15 +9,12 @@ from window import Window
 
 
 class TextViewer:
-    def __init__(self, root, text: str, filename: str):
-        # Initialize fonts
-        app.load_fonts()
-
+    def __init__(self, window: Window, text: str):
         # Load settings before creating UI elements
         self.load_settings()
 
-        # Initialize Window
-        self.window = Window(root, f"Lector Horitzontal - {filename}")
+        # Store window
+        self.window = window
 
         # Store text for font changes
         self.text = text
@@ -189,8 +186,6 @@ class TextViewer:
     
 
     def load_settings(self):
-        serialization.load()
-        
         self.current_font = serialization.get_setting('font')
         self.font_size = serialization.get_setting('font_size')
         self.scroll_amount = serialization.get_setting('speed')
