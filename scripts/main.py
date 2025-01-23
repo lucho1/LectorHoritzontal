@@ -25,8 +25,8 @@ if __name__ == "__main__":
 
     # Create app window
     root = tk.Tk()
-    window = Window(root, f"Lector Horitzontal")
     app.load_fonts()
+    window = Window(root, f"Lector Horitzontal")
     
     # Load test file
     filepath = app.get_test_file("reader_test.docx")
