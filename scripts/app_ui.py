@@ -39,16 +39,35 @@ class AppUI:
         # Restart button
         ui.create_button(left_frame, "Reinicia Valors", lambda: self._reset_settings(font_var, fsize_var, speed_slider, scroll_label),
                           takefocus=False, padx=(10, 0))
-
-        # Other UI elements
+        
+        # Frames for other elements
         center_frame: tk.Frame = ui.create_frame(top_frame, expand=True)
         text_frame: tk.Frame = ui.create_frame(self.root, fill='both', expand=True)
 
+        # Text Area and color pickers
+        bg_color: str = controller.get_bg_color()
+        text_color: str = controller.get_text_color()
+
+        self._create_text_area(text_frame, text_color)
+        self.root.configure(bg=bg_color)
+
+        ui.create_color_picker(left_frame, bg_color, self.text_area, self._on_bg_color_changed, "Fons: ", padx=(10, 5))
+        ui.create_color_picker(left_frame, text_color, self.text_area, self._on_text_color_changed, "Text: ", padx=(5, 5))
+
+        # Action buttons
         self._create_action_buttons(center_frame)
-        self._create_text_area(text_frame)
         
         # Set input OnKeyPressed binding
         self.root.bind('<Key>', self._on_key_pressed)
+    
+    
+    def _on_bg_color_changed(self, new_color: str, widget: tk.Widget):
+        self.controller.on_bg_color_changed(new_color)
+        widget.configure(bg=new_color)
+    
+    def _on_text_color_changed(self, new_color: str, widget: tk.Widget):
+        self.controller.on_text_color_changed(new_color)
+        widget.configure(fg=new_color)
     
 
 
@@ -152,7 +171,7 @@ class AppUI:
         ui.bind_button_events(scroll_right_button, lambda _: self._start_scrolling(True), lambda _: self._stop_scrolling())
     
 
-    def _create_text_area(self, parent_frame: tk.Frame):
+    def _create_text_area(self, parent_frame: tk.Frame, text_color: str):
         # Horizontal scrollbar
         scrollbar = ui.create_scrollbar(parent_frame, 'horizontal', fill=tk.X)
 
@@ -161,7 +180,7 @@ class AppUI:
         scrollbar.config(command=self.text_area.xview)
 
         # Insert text and disable editing
-        self.text_area.configure(state='disabled', font=self.controller.get_current_font())
+        self.text_area.configure(state='disabled', font=self.controller.get_current_font(), fg=text_color)
 
         # Focus the text area
         self.text_area.focus_set()

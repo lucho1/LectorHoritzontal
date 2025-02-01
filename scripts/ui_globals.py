@@ -1,23 +1,23 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, colorchooser
 
 
 
 ### UI Basics (Frames and Text)
 def create_frame(parent: tk.Widget, fill = None, expand = False, side = None, padx = 0, pady = 0) -> tk.Frame:
-    frame = tk.Frame(parent, bg='#E0E0E0')
+    frame = tk.Frame(parent, bg=None)
     frame.pack(side=side, fill=fill, expand=expand, padx=padx, pady=pady)
     return frame
 
 
 def create_label(parent: tk.Widget, text: str, padx = 5, **kwargs) -> tk.Label:
-    label = tk.Label(parent, text=text, bg='#E0E0E0', **kwargs)
+    label = tk.Label(parent, text=text, bg=None, **kwargs)
     label.pack(side=tk.LEFT, padx=padx)
     return label
 
 
 def create_textarea(parent: tk.Widget, xscroll_callback, height: int, width: int) -> tk.Text:
-    text_area = tk.Text(parent, wrap='none', height=height, width=width, bg='#E0E0E0', fg='black', xscrollcommand=xscroll_callback)
+    text_area = tk.Text(parent, wrap='none', height=height, width=width, bg=None, fg=None, xscrollcommand=xscroll_callback)
     text_area.pack(expand=True, fill='x')
     return text_area
 
@@ -61,3 +61,22 @@ def create_dropdown(parent: tk.Widget, values: list, initial_value: str, callbac
         dropdown.bind('<<ComboboxSelected>>', callback)
     
     return dropdown_var
+
+
+def create_color_picker(parent: tk.Widget, initial_color: str, target_widget: tk.Widget, callback, label: str = "", padx = 5) -> tk.Button:
+    frame = create_frame(parent, side=tk.LEFT, padx=padx)
+    if label:
+        create_label(frame, label, padx=2)
+    
+    color_button = tk.Button(frame, width=3, bg=initial_color)
+    color_button.pack(side=tk.LEFT)
+
+    def pick_color():
+        result = colorchooser.askcolor()
+        if result and result[1]:
+            color = result[1]
+            color_button.configure(bg=color)
+            callback(color, target_widget)
+    
+    color_button.configure(command=pick_color)
+    return color_button
