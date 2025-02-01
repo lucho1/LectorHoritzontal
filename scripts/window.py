@@ -1,3 +1,4 @@
+import app_globals as app
 import tkinter as tk
 import serialization
 
@@ -13,7 +14,6 @@ class Window:
         self.height: float = 0.0
         self.x: float = 0.0
         self.y: float = 0.0
-        self.scroll_callback = None
 
         # Set the root window
         self.root: tk.Tk = root
@@ -28,9 +28,6 @@ class Window:
 
         # Bind window events and keys
         self.root.bind('<Configure>', self._on_window_configure)
-        self.root.bind('<space>', self._on_space_pressed)
-        self.root.bind('<Control_L>', self._on_left_ctrl_pressed)
-        self.root.bind('<Key>', self._on_key_pressed)
     
     
     ### Public functions
@@ -44,31 +41,8 @@ class Window:
         return self.root
     
     
-    ### Key bindings & Event callbacks
-    def _on_space_pressed(self, _):
-        new_pos: float = self.controller.scroll(True)
-        
-        if self.scroll_callback:
-            self.scroll_callback(new_pos)
-        
-        return "break"
-    
-
-    def _on_left_ctrl_pressed(self, _):
-        new_pos: float = self.controller.scroll(False)
-        
-        if self.scroll_callback:
-            self.scroll_callback(new_pos)
-        
-        return "break"
-    
-    
-    def _on_key_pressed(self, event):
-        if event.keysym != 'space' and event.keysym != 'Control_L':
-            return "break"
-    
-    
-    def _on_window_configure(self, event):
+    ### Window configure event callback
+    def _on_window_configure(self, event: app.TkEvent):
         if event.widget == self.root and self.root.winfo_viewable():
             self.width = self.root.winfo_width()
             self.height = self.root.winfo_height()

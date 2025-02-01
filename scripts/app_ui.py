@@ -47,8 +47,10 @@ class AppUI:
         self._create_action_buttons(center_frame)
         self._create_text_area(text_frame)
         
-        # Set scroll callback
-        window.set_scroll_callback(self.text_area.xview_moveto)
+        # Set input Key bindings
+        self.root.bind('<space>', lambda _: self._scroll(True))
+        self.root.bind('<Control_L>', lambda _: self._scroll(False))
+        self.root.bind('<Key>', self._on_key_pressed)
     
     
     ### UI Elements Callbacks
@@ -70,25 +72,30 @@ class AppUI:
         scroll_label.config(text=f"{speed:.1f}%")
 
     
-    def _start_scrolling(self, _: app.TkEvent, scroll_right: bool):
+    def _start_scrolling(self, scroll_right: bool):
         self._stop_scrolling()
         self.is_scrolling = True
         self._continuous_scroll(scroll_right)
     
     
+    def _stop_scrolling(self):
+        self.is_scrolling = False
+        self.text_area.focus_set()
+    
+
     def _continuous_scroll(self, scroll_right: bool):
         if not self.is_scrolling:
             return
         
-        # Scroll, modify text area xview and call _continuous_scroll() again after a while
-        new_scrolled_pos: float = self.controller.scroll(scroll_right)
-        self.text_area.xview_moveto(new_scrolled_pos)
+        # Scroll and call _continuous_scroll() again after a while
+        self._scroll(scroll_right)
         self.root.after(25, lambda: self._continuous_scroll(scroll_right))
     
     
-    def _stop_scrolling(self, _: app.TkEvent = None):
-        self.is_scrolling = False
-        self.text_area.focus_set()
+    def _scroll(self, scroll_right: bool):
+        new_scrolled_pos: float = self.controller.scroll(scroll_right)
+        self.text_area.xview_moveto(new_scrolled_pos)
+        return "break"
 
     
     def _reset_settings(self, font_var: tk.StringVar, size_var: tk.StringVar, speed_slider: ttk.Scale, speed_label: tk.Label):
@@ -118,6 +125,12 @@ class AppUI:
         self.text_area.replace(1.0, tk.END, new_text)
         self.text_area.configure(state='disabled')
         self.text_area.xview_moveto(0.0)
+    
+    
+    def _on_key_pressed(self, event: app.TkEvent):
+        # Block event propagation for all keys that are not space and LCtrl
+        if event.keysym != 'space' and event.keysym != 'Control_L':
+            return "break"
 
 
     
@@ -131,8 +144,8 @@ class AppUI:
         scroll_right_button = ui.create_button(parent_frame, "Mou →")
 
         # Bind scroll buttons' press & release events
-        ui.bind_button_events(scroll_left_button, lambda e: self._start_scrolling(e, False), self._stop_scrolling)
-        ui.bind_button_events(scroll_right_button, lambda e: self._start_scrolling(e, True), self._stop_scrolling)
+        ui.bind_button_events(scroll_left_button, lambda _: self._start_scrolling(False), lambda _: self._stop_scrolling())
+        ui.bind_button_events(scroll_right_button, lambda _: self._start_scrolling(True), lambda _: self._stop_scrolling())
     
 
     def _create_text_area(self, parent_frame: tk.Frame):
