@@ -101,12 +101,14 @@ class AppUI:
         new_size: int = int(event.widget.get())
         new_font: app.FontTuple = self.controller.on_font_size_changed(new_size)
         self.text_area.configure(font=new_font)
+        self.text_area.focus_set()
 
     
     def _on_font_changed(self, event: app.TkEvent):
         new_font: str = str(event.widget.get())
         changed_font: app.FontTuple = self.controller.on_font_changed(new_font)
         self.text_area.configure(font=changed_font)
+        self.text_area.focus_set()
 
     
     def _on_scroll_speed_changed(self, value: str, scroll_label: tk.Label):
