@@ -52,7 +52,7 @@ def create_scrollbar(parent: tk.Widget, orientation:str, fill) -> tk.Scrollbar:
     return scrollbar
 
 
-def create_dropdown(parent: tk.Widget, values: list, initial_value: str, callback = None, padx = 5, width: int = 10) -> tuple[ttk.Combobox, tk.StringVar]:
+def create_dropdown(parent: tk.Widget, values: list, initial_value: str, callback = None, padx = 5, width: int = 10) -> tk.StringVar:
     dropdown_var = tk.StringVar(value=initial_value)
     dropdown = ttk.Combobox(parent, textvariable=dropdown_var, values=values, state='readonly', width=width)
     dropdown.pack(side=tk.LEFT, padx=padx)

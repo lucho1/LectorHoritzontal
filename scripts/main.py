@@ -2,9 +2,11 @@ import tkinter as tk
 import app_globals as app
 import serialization
 
-from text_viewer import TextViewer
-from file_readers import read_file
+from text_manager import TextManager
+from app_controller import AppController
 from window import Window
+from file_readers import read_file
+from app_ui import AppUI
 
 
 
@@ -22,11 +24,14 @@ if __name__ == "__main__":
     # Load app
     app.print_blue("Loading App...")
     serialization.load()
+    text_mgr: TextManager = TextManager()
+    controller: AppController = AppController(text_mgr)
+    
 
     # Create app window
     root = tk.Tk()
     app.load_fonts()
-    window = Window(root, f"Lector Horitzontal")
+    window = Window(root, controller, f"Lector Horitzontal")
     
     # Load test file
     filepath = app.get_test_file("reader_test.docx")
@@ -34,10 +39,12 @@ if __name__ == "__main__":
         app.print_error(f"No file found at: {filepath}")
         exit(1)
 
-    file: str = read_file(filepath)
+    file_content: str = read_file(filepath)
     name: str = app.get_filename(filepath)
-    window.update_title(f"Lector Horitzontal -  {name}")
+    window.set_title(f"Lector Horitzontal -  {name}")
 
     # Create TextViewer & enter loop
-    app_viewer = TextViewer(window, file)
+    #app_viewer = TextViewer(window, file)
+    ui = AppUI(window, controller)
+    ui.display_new_text(file_content)
     root.mainloop()

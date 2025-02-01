@@ -1,9 +1,20 @@
 import os
 
-from typing import Union, Callable
+import tkinter as tk
+
+from typing import Union, Callable, Tuple, Optional, TypeAlias
 from tkinter import filedialog, font
 
 os.system('color')
+
+
+
+### Global Definitions
+# Type alias Tuple (str, int) defining a font (font type, font size)
+FontTuple: TypeAlias = Tuple[str, int]
+
+# Type alias defining a TkEvent
+TkEvent: TypeAlias = Optional[tk.Event]
 
 
 
@@ -29,7 +40,7 @@ TEST_DATA_FILEPATH: str = os.path.join(ROOT_DIR, "data\\test\\")
 DEFAULT_SETTINGS: dict[str, Union[str, int]] = {
     'font': 'Calibri',
     'font_size': 75,
-    'speed': 10,
+    'speed': 10.0,
     'win_w': 800,
     'win_h': 600,
     'win_x': 50,
