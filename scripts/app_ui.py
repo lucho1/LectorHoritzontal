@@ -47,12 +47,22 @@ class AppUI:
         self._create_action_buttons(center_frame)
         self._create_text_area(text_frame)
         
-        # Set input Key bindings
-        self.root.bind('<space>', lambda _: self._scroll(True))
-        self.root.bind('<Control_L>', lambda _: self._scroll(False))
+        # Set input OnKeyPressed binding
         self.root.bind('<Key>', self._on_key_pressed)
     
+
+
+    ### Input Key bindings
+    def _on_key_pressed(self, event: app.TkEvent):
+        # Block event propagation for all keys that are not space and LCtrl (otherwise, scroll)
+        match event.keysym:
+            case 'space':       self._scroll(True)
+            case 'Control_L':   self._scroll(False)
+            case _:             return "break"
+        return "break"
     
+    
+
     ### UI Elements Callbacks
     def _on_font_size_changed(self, event: app.TkEvent):
         new_size: int = int(event.widget.get())
@@ -125,12 +135,6 @@ class AppUI:
         self.text_area.replace(1.0, tk.END, new_text)
         self.text_area.configure(state='disabled')
         self.text_area.xview_moveto(0.0)
-    
-    
-    def _on_key_pressed(self, event: app.TkEvent):
-        # Block event propagation for all keys that are not space and LCtrl
-        if event.keysym != 'space' and event.keysym != 'Control_L':
-            return "break"
 
 
     
