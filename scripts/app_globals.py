@@ -44,7 +44,9 @@ DEFAULT_SETTINGS: dict[str, Union[str, int]] = {
     'win_w': 800,
     'win_h': 600,
     'win_x': 50,
-    'win_y': 50
+    'win_y': 50,
+    'bg_color': '#E0E0E0',
+    'text_color': '#000000'
 }
 
 # Current settings list

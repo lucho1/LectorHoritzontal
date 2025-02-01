@@ -12,6 +12,8 @@ class AppController:
         self.font_size: int = 0
         self.scroll_speed: float = 0.0
         self.current_position: float = 0.0
+        self.bg_color: str = ""
+        self.text_color: str = ""
         self.text_manager = text_manager
 
         # Reset settings and load them
@@ -19,10 +21,15 @@ class AppController:
         self._load_settings()
 
 
-    ### Public functions
+    ### Public functions TODO: Change name current_font to font
     def get_current_font(self) -> app.FontTuple:
         return (self.font, self.font_size)
     
+    def get_bg_color(self) -> str:
+        return self.bg_color
+
+    def get_text_color(self) -> str:
+        return self.text_color    
     
     def get_scroll_speed(self) -> float:
         return self.scroll_speed
@@ -39,6 +46,15 @@ class AppController:
         self.font = new_font
         self._save_settings()
         return self.get_current_font()
+    
+    def on_bg_color_changed(self, new_color: str):
+        self.bg_color = new_color
+        self._save_settings()
+    
+    
+    def on_text_color_changed(self, new_color: str):
+        self.text_color = new_color
+        self._save_settings()
 
     
     def on_scroll_speed_changed(self, new_scroll_speed: float):
@@ -75,6 +91,9 @@ class AppController:
         serialization.set_setting('font', self.font)
         serialization.set_setting('font_size', self.font_size)
         serialization.set_setting('speed', self.scroll_speed)
+
+        serialization.set_setting('bg_color', self.bg_color)
+        serialization.set_setting('text_color', self.text_color)
         serialization.save()
     
     
@@ -82,3 +101,6 @@ class AppController:
         self.font = str(serialization.get_setting('font'))
         self.font_size = int(serialization.get_setting('font_size'))
         self.scroll_speed = float(serialization.get_setting('speed'))
+
+        self.bg_color = str(serialization.get_setting('bg_color'))
+        self.text_color = str(serialization.get_setting('text_color'))
