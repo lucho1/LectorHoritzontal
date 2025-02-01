@@ -21,6 +21,7 @@ def save():
     if not app.CURRENT_SETTINGS:
         app.CURRENT_SETTINGS = app.DEFAULT_SETTINGS.copy()
 
+    # Try opening json file and dumping settings
     try:
         app.ensure_file_exists(app.SETTINGS_FILEPATH)
         with open(app.SETTINGS_FILEPATH, 'w') as f:
@@ -33,6 +34,7 @@ def load() -> dict[str, Union[str, int]]:
     print("Loading settings...")
     app.CURRENT_SETTINGS = app.DEFAULT_SETTINGS.copy()
 
+    # Try opening json file and get settings
     try:
         if app.file_exists(app.SETTINGS_FILEPATH):
             print(f"Settings loaded from: {app.SETTINGS_FILEPATH}")
