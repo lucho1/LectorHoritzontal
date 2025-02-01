@@ -66,4 +66,4 @@ class Window:
         self.x = serialization.get_setting('win_x')
         self.y = serialization.get_setting('win_y')
 
-        print("Window settings:", f"Size({self.width}x{self.height})", f"Position({self.x},{self.y})")
+        app.print_info("Window settings: " + f"Size({self.width}x{self.height}) " + f"Position({self.x},{self.y}) ")

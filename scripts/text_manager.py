@@ -21,7 +21,7 @@ class TextManager:
         document_path: str = app.open_file_dialog()
         if not document_path:
             ret = f"Couldn't find document path: {document_path}"
-            print(ret)
+            app.print_error(ret)
             return ret
         
         # Try read new file and return its content
@@ -34,5 +34,5 @@ class TextManager:
             #self.window.update_title(f"Lector Horitzontal - {app.get_filename(document_path)}")
         except Exception as e:
             ret = f"Error loading file: {e}"
-            print(ret)
+            app.print_error(ret)
             return ret
