@@ -69,12 +69,11 @@ class AppUI:
         self.controller.on_bg_color_changed(new_color)
         ui.configure_ttk_style(new_color)
 
-        if isinstance(widget, (tk.Frame, tk.Label, tk.Button, tk.Text)):
+        # Update widget background color
+        if isinstance(widget, (tk.Frame, tk.Label, tk.Text)):
             widget.configure(bg=new_color)
         
         for child in widget.winfo_children():
-            if isinstance(child, tk.Button) and child.winfo_width() == 3:
-                continue
             self._on_bg_color_changed(new_color, child)
 
         
