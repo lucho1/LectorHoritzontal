@@ -42,8 +42,7 @@ class AppUI:
         speed_slider: ttk.Scale = ui.create_slider(left_frame, 1, 50, current_speed, lambda value: self._on_scroll_speed_changed(value, scroll_label))
 
         # Restart button
-        ui.create_button(left_frame, "Reinicia Valors", lambda: self._reset_settings(font_var, fsize_var, speed_slider, scroll_label),
-                          takefocus=False, padx=(10, 0))
+        ui.create_button(left_frame, "Reinicia Valors", lambda: self._reset_settings(font_var, fsize_var, speed_slider, scroll_label), padx=(10, 0))
         
         # Frames for other elements
         center_frame: tk.Frame = ui.create_frame(top_frame, expand=True)
@@ -66,6 +65,7 @@ class AppUI:
     
     
     def _on_bg_color_changed(self, new_color: str, widget: tk.Widget):
+        # Notify controller and update UI Style
         self.controller.on_bg_color_changed(new_color)
         ui.configure_ttk_style(new_color)
 
@@ -73,6 +73,7 @@ class AppUI:
         if isinstance(widget, (tk.Frame, tk.Label, tk.Text)):
             widget.configure(bg=new_color)
         
+        # Call for children widgets to change bg color
         for child in widget.winfo_children():
             self._on_bg_color_changed(new_color, child)
 

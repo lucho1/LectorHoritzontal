@@ -13,7 +13,6 @@ def configure_ttk_style(bg_color: str):
     
     style.map('TButton',
         background=[('active', '#CCCCCC')],
-        #background=[('active', bg_color)],
         highlightcolor=[('focus', bg_color)],
         relief=[('pressed', 'flat')],
         borderwidth=[('active', 0)])
@@ -41,8 +40,8 @@ def create_textarea(parent: tk.Widget, xscroll_callback, height: int, width: int
 
 
 ### Buttons
-def create_button(parent: tk.Widget, text: str, callback = None, takefocus = False, padx = 5, **kwargs) -> ttk.Button:
-    button = ttk.Button(parent, style='TButton', text=text, command=callback, takefocus=takefocus, **kwargs)
+def create_button(parent: tk.Widget, text: str, callback = None, padx = 5, **kwargs) -> ttk.Button:
+    button = ttk.Button(parent, style='TButton', text=text, command=callback, takefocus=False, **kwargs)
     button.pack(side=tk.LEFT, padx=padx)
     return button
 
@@ -85,8 +84,8 @@ def create_color_picker(parent: tk.Widget, initial_color: str, target_widget: tk
     if label:
         create_label(frame, label, padx=2)
     
-    color_button = tk.Button(frame, width=3, bg=initial_color, borderwidth=0, relief='flat')
-    color_button.pack(side=tk.LEFT)
+    color_button = tk.Button(frame, width=3, bg=initial_color, borderwidth=1, relief='solid')
+    color_button.pack(side=tk.LEFT, pady=2)
 
     def pick_color():
         result = colorchooser.askcolor()
