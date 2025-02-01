@@ -2,22 +2,39 @@ import tkinter as tk
 from tkinter import ttk, colorchooser
 
 
+### Style
+def configure_ttk_style(bg_color: str):
+    style = ttk.Style()
+    style.theme_use('vista') # TODO: Probably unavailable outside Windows
+
+    style.configure('TButton', background=bg_color, borderwidth=0, relief='flat', padding=(10, 5))
+    style.configure('TCombobox', borderwidth=0, relief='flat', arrowsize=12)
+    style.configure('TScale', background=bg_color, borderwidth=0, relief='flat', troughcolor='#CCCCCC')
+    
+    style.map('TButton',
+        background=[('active', '#CCCCCC')],
+        #background=[('active', bg_color)],
+        highlightcolor=[('focus', bg_color)],
+        relief=[('pressed', 'flat')],
+        borderwidth=[('active', 0)])
+
+
 
 ### UI Basics (Frames and Text)
 def create_frame(parent: tk.Widget, fill = None, expand = False, side = None, padx = 0, pady = 0) -> tk.Frame:
-    frame = tk.Frame(parent, bg=None)
+    frame = tk.Frame(parent, bg=parent.cget('bg'), borderwidth=0, relief='flat')
     frame.pack(side=side, fill=fill, expand=expand, padx=padx, pady=pady)
     return frame
 
 
 def create_label(parent: tk.Widget, text: str, padx = 5, **kwargs) -> tk.Label:
-    label = tk.Label(parent, text=text, bg=None, **kwargs)
+    label = tk.Label(parent, text=text, bg=parent.cget('bg'), borderwidth=0, **kwargs)
     label.pack(side=tk.LEFT, padx=padx)
     return label
 
 
 def create_textarea(parent: tk.Widget, xscroll_callback, height: int, width: int) -> tk.Text:
-    text_area = tk.Text(parent, wrap='none', height=height, width=width, bg=None, fg=None, xscrollcommand=xscroll_callback)
+    text_area = tk.Text(parent, wrap='none', height=height, width=width, xscrollcommand=xscroll_callback, borderwidth=0, relief='flat', padx=10, pady=10)
     text_area.pack(expand=True, fill='x')
     return text_area
 
@@ -25,7 +42,7 @@ def create_textarea(parent: tk.Widget, xscroll_callback, height: int, width: int
 
 ### Buttons
 def create_button(parent: tk.Widget, text: str, callback = None, takefocus = False, padx = 5, **kwargs) -> ttk.Button:
-    button = ttk.Button(parent, text=text, command=callback, takefocus=takefocus, **kwargs)
+    button = ttk.Button(parent, style='TButton', text=text, command=callback, takefocus=takefocus, **kwargs)
     button.pack(side=tk.LEFT, padx=padx)
     return button
 
@@ -38,7 +55,7 @@ def bind_button_events(button: ttk.Button, pressed_callback = None, release_call
 
 ### Other UI Elements
 def create_slider(parent: tk.Widget, from_: float, to: float, initial_value: float, callback = None) -> ttk.Scale:
-    slider = ttk.Scale(parent, from_=from_, to=to, value=initial_value, orient='horizontal', length=100)
+    slider = ttk.Scale(parent, style='TScale', orient='horizontal', length=100, from_=from_, to=to, value=initial_value)
     slider.pack(side=tk.LEFT)
     if callback:
         slider.configure(command=callback)
@@ -47,14 +64,14 @@ def create_slider(parent: tk.Widget, from_: float, to: float, initial_value: flo
 
 
 def create_scrollbar(parent: tk.Widget, orientation:str, fill) -> tk.Scrollbar:
-    scrollbar = tk.Scrollbar(parent, orient=orientation)
+    scrollbar = tk.Scrollbar(parent, orient=orientation, borderwidth=0, relief='flat')
     scrollbar.pack(side=tk.BOTTOM, fill=fill)
     return scrollbar
 
 
 def create_dropdown(parent: tk.Widget, values: list, initial_value: str, callback = None, padx = 5, width: int = 10) -> tk.StringVar:
     dropdown_var = tk.StringVar(value=initial_value)
-    dropdown = ttk.Combobox(parent, textvariable=dropdown_var, values=values, state='readonly', width=width)
+    dropdown = ttk.Combobox(parent, style='TCombobox', state='readonly', textvariable=dropdown_var, values=values, width=width)
     dropdown.pack(side=tk.LEFT, padx=padx)
 
     if callback:
@@ -68,7 +85,7 @@ def create_color_picker(parent: tk.Widget, initial_color: str, target_widget: tk
     if label:
         create_label(frame, label, padx=2)
     
-    color_button = tk.Button(frame, width=3, bg=initial_color)
+    color_button = tk.Button(frame, width=3, bg=initial_color, borderwidth=0, relief='flat')
     color_button.pack(side=tk.LEFT)
 
     def pick_color():

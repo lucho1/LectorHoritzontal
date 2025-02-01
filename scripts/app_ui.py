@@ -17,6 +17,11 @@ class AppUI:
         self.text_area: tk.Text = None
         self.is_scrolling = False
 
+        # Set UI Style
+        bg_color: str = controller.get_bg_color()
+        text_color: str = controller.get_text_color()
+        ui.configure_ttk_style(bg_color)
+
         # Top frame to hold other frames, Left frame for controls
         top_frame: tk.Frame = ui.create_frame(self.root, fill=tk.X, padx=5, pady=5)
         left_frame: tk.Frame = ui.create_frame(top_frame, side=tk.LEFT)
@@ -45,17 +50,16 @@ class AppUI:
         text_frame: tk.Frame = ui.create_frame(self.root, fill='both', expand=True)
 
         # Text Area and color pickers
-        bg_color: str = controller.get_bg_color()
-        text_color: str = controller.get_text_color()
-
-        self._create_text_area(text_frame, text_color)
+        self._create_text_area(text_frame, bg_color, text_color)
         self.root.configure(bg=bg_color)
 
-        ui.create_color_picker(left_frame, bg_color, self.text_area, self._on_bg_color_changed, "Fons: ", padx=(10, 5))
+        ui.create_color_picker(left_frame, bg_color, self.root, self._on_bg_color_changed, "Fons: ", padx=(10, 5))
         ui.create_color_picker(left_frame, text_color, self.text_area, self._on_text_color_changed, "Text: ", padx=(5, 5))
 
         # Action buttons
         self._create_action_buttons(center_frame)
+
+        self._on_bg_color_changed(bg_color, self.root)
         
         # Set input OnKeyPressed binding
         self.root.bind('<Key>', self._on_key_pressed)
@@ -63,7 +67,17 @@ class AppUI:
     
     def _on_bg_color_changed(self, new_color: str, widget: tk.Widget):
         self.controller.on_bg_color_changed(new_color)
-        widget.configure(bg=new_color)
+        ui.configure_ttk_style(new_color)
+
+        if isinstance(widget, (tk.Frame, tk.Label, tk.Button, tk.Text)):
+            widget.configure(bg=new_color)
+        
+        for child in widget.winfo_children():
+            if isinstance(child, tk.Button) and child.winfo_width() == 3:
+                continue
+            self._on_bg_color_changed(new_color, child)
+
+        
     
     def _on_text_color_changed(self, new_color: str, widget: tk.Widget):
         self.controller.on_text_color_changed(new_color)
@@ -171,16 +185,14 @@ class AppUI:
         ui.bind_button_events(scroll_right_button, lambda _: self._start_scrolling(True), lambda _: self._stop_scrolling())
     
 
-    def _create_text_area(self, parent_frame: tk.Frame, text_color: str):
+    def _create_text_area(self, parent_frame: tk.Frame, bg_color: str, text_color: str):
         # Horizontal scrollbar
         scrollbar = ui.create_scrollbar(parent_frame, 'horizontal', fill=tk.X)
 
         # Text widget
         self.text_area = ui.create_textarea(parent_frame, scrollbar.set, height=1, width=1000)
+        self.text_area.configure(state='disabled', font=self.controller.get_current_font(), fg=text_color, bg=bg_color)
         scrollbar.config(command=self.text_area.xview)
-
-        # Insert text and disable editing
-        self.text_area.configure(state='disabled', font=self.controller.get_current_font(), fg=text_color)
 
         # Focus the text area
         self.text_area.focus_set()
